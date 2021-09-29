@@ -1,4 +1,5 @@
 """
+재귀를 사용하지 않은 풀이
 def permute(nums):
     answer = [[n]for n in nums]
     for i in range(len(nums)-1):
@@ -12,6 +13,10 @@ def permute(nums):
             #print(temp_answer)
         answer = temp_answer
     return answer
+itertools를 사용한 풀이
+def permute(nums):
+    return list(itertools.permutations(nums))
+
 """
 def dfs(answer,nums,permutation):
     if len(permutation) == len(nums):
