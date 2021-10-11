@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def findItinerary(tickets):
+def solution(tickets):
     graph = defaultdict(list)
     for s,d in sorted(tickets, reverse = True):
         graph[s].append(d)
@@ -9,9 +9,5 @@ def findItinerary(tickets):
         while graph[s]:
             dfs(graph[s].pop())
         route.append(s)
-    dfs("JFK")
+    dfs("ICN")
     return route[::-1]
-
-tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]
-
-print(findItinerary(tickets))

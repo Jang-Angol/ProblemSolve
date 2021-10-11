@@ -1,23 +1,26 @@
+from collections import deque
 import heapq
 
 def solution(jobs):
     answer = 0
     n = len(jobs)
-    heapq.heapify(jobs)
+    jobs = deque(sorted(jobs))
     time = 0
-    while jobs:
-        job = heapq.heappop(jobs)
-        if jobs and job[1] > jobs[0][1]:
-            temp_job = heapq.heappop(jobs)
-            heapq.heappush(jobs,job)
-            job = temp_job
-        if time < job[0]:
-            time = job[0]
-        time += job[1]
-        answer += time - job[0]
-        print(time-job[0])
+    pQ = []
+    while jobs or pQ:
+        if not pQ:
+            process = jobs.popleft()
+            heapq.heappush(pQ,process[::-1])
+        while jobs and time >= jobs[0][0]:
+            process = jobs.popleft()
+            heapq.heappush(pQ,process[::-1])
+        process = heapq.heappop(pQ)
+        if time < process[1]:
+            time = process[1]
+        time = time + process[0]
+        answer += time - process[1]
         
-    return answer // n
+    return answer//n
 
 jobs = [[0, 3], [1, 9], [2, 6]]
 print(solution(jobs))
