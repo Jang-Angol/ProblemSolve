@@ -1,22 +1,19 @@
 def solution(number, k):
-    answer = ''
-    used = [True] * len(number)
-    print(used)
-    for n in range(10):
-        if k == 0:
-            break
-        for i in range(len(number)):
-            print(i)
-            if k == 0:
-                break
-            if used[i] and number[i] == str(n):
-                used[i] = False
-                k -= 1
-    for i in range(len(number)):
-        if used[i]:
-            answer += number[i]
+    answer = []
     
-    return answer
+    for i in range(len(number)):
+        if not answer:
+            answer.append(number[i])
+            continue
+        if k > 0:
+            while answer[-1] < number[i]:
+                answer.pop()
+                k -= 1
+                if not answer or k < 1:
+                    break
+        answer.append(number[i])            
+
+    return "".join(answer[:len(answer)-k])
 
 number = "1924"
 k = 2
