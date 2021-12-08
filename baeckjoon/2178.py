@@ -5,9 +5,6 @@ N, M = map(int,input().split())
 maze = []
 for i in range(N):
     maze.append(list(map(int,list(input()))))
-# 상하좌우
-di = [-1,1,0,0]
-dj = [0,0,-1,1]
 # 큐, 방문 여부
 q = deque([[0,0]])
 visited = [[False for j in range(M)] for i in range(N)]
@@ -15,15 +12,16 @@ visited = [[False for j in range(M)] for i in range(N)]
 while q:
     # 현재 위치
     location = q.popleft()
-    for i, j in zip(di,dj):
+    for di, dj in zip([-1,1,0,0],[0,0,-1,1]):
         # 이동할 좌표
-        x, y = location[0] + i, location[1] + j
+        i, j = location[0] + di, location[1] + dj
         # 좌표 유효성 검증
-        if x < 0 or y < 0 or x >= N or y >= M:
+        if i < 0 or j < 0 or i >= N or j >= M:
             continue
         # 방문 여부 확인 및 이동 가능 여부 확인
-        if not visited[x][y] and maze[x][y] != 0:
-            q.append([x,y])
-            maze[x][y] = maze[location[0]][location[1]] + 1
-            visited[x][y] = True
+        if not visited[i][j] and maze[i][j] != 0:
+            q.append([i,j])
+            maze[i][j] = maze[location[0]][location[1]] + 1
+            visited[i][j] = True
+
 print(maze[N-1][M-1])
