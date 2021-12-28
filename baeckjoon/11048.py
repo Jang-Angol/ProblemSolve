@@ -1,5 +1,4 @@
 # 이동하기
-
 N, M = map(int,input().split())
 
 maze = []
@@ -16,5 +15,4 @@ for r in range(N):
             if max_value < maze[r+i][c+j]:
                 max_value = maze[r+i][c+j]
         maze[r][c] += max_value
-print(maze)
 print(maze[N-1][M-1])
