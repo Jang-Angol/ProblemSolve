@@ -15,17 +15,18 @@ class Main {
         int M = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        nums = new long[N + 1];
+
         S = 1;
         while (S < N) {
             S *= 2;
         }
+        nums = new long[S];
         tree = new long[2*S+1];
 
         for (int i = 0; i < N; i++) {
             nums[i] = Long.parseLong(br.readLine());
-            initBU(i+1,nums[i]);
         }
+        initBU();
 
         //System.out.println(Arrays.toString(tree));
 
@@ -35,23 +36,26 @@ class Main {
             int b = Integer.parseInt(st.nextToken());
             long c = Long.parseLong(st.nextToken());
             if (a == 1){
-                initBU(b,c);
+                updateBU(b,c);;
             } else {
                 System.out.println(queryBU(b, (int) c));
             }
         }
     }
 
-    static void initBU(int target, long num) {
-        // leaf에 값 반영
-        int node = S + target - 1;
-        tree[node] = num;
-        node /= 2;
-        // 내부 노드 채움
-        while (node > 0) {
-            tree[node] = tree[node * 2] + tree[node * 2 + 1];
+    static void initBU() {
+        for (int i = 0 ; i < S; i++){
+            // leaf에 값 반영
+            int node = S + i;
+            tree[node] = nums[i];
             node /= 2;
+            // 내부 노드 채움
+            while (node > 0) {
+                tree[node] = tree[node * 2] + tree[node * 2 + 1];
+                node /= 2;
+            }
         }
+
     }
 
     static long query(int left, int right, int node, int queryLeft, int queryRight) {
@@ -115,6 +119,7 @@ class Main {
         // value 반영
         tree[node] = value;
         // Root에 도달할 때 까지 부모에 값 반영
+        node /= 2;
         while (node > 0) {
             tree[node] = tree[node * 2] + tree[node * 2 + 1];
             node /= 2;
