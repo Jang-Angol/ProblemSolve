@@ -2,27 +2,28 @@
 N, C = map(int,input().split())
 
 homes = []
+answer = 0
 
 for _ in range(N):
     homes.append(int(input()))
 
 homes.sort()
 
-print(homes)
+low = 1
+high = homes[-1] - homes[0]
 
-def binary_search(s,e,v):
-    mid = (s+e)//2
-    while homes[mid] != v:
-        print(homes[mid])
-        if (e-s) < 2:
-            return mid
-        if homes[mid] > v:
-            e = mid -1
-        elif homes[mid] == v:
-            return mid
-        else:
-            s = mid + 1
-        mid = (s+e)//2
-v = binary_search(0,len(homes),(homes[0]+homes[-1])//2)
+while low <= high:
+    cnt = 1
+    mid = (low+high)//2
+    prev = homes[0]
+    for home in homes:
+        if home >= mid + prev:
+            cnt += 1
+            prev = home
+    if cnt >= C:
+        low = mid + 1
+        answer = mid
+    else:
+        high = mid - 1
 
-print(v)
+print(answer)
