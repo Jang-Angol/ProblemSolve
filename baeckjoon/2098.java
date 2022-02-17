@@ -19,6 +19,9 @@ class Main {
         dp = new int[N + 1][(int) Math.pow(2, N)];
         visited = new boolean[N + 1];
         // int visitAll = (1<<N)-1; // pow보다 성능이 더 좋다
+        for (int i = 0; i <=N;i++){
+            Arrays.fill(dp[i],Integer.MAX_VALUE);
+        }
 
         for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine(), " ");
@@ -27,13 +30,13 @@ class Main {
             }
         }
 
-        for (int i = 1; i <= N; i++) {
-            dfs(i, 0);
-        }
+        dp[1][1] = 0;
+        visited[1] = true;
+        dfs(1,0);
 
-        /*for (int i = 1; i <= N; i++){
+        for (int i = 1; i <= N; i++){
             System.out.println(Arrays.toString(dp[i]));
-        }*/
+        }
         System.out.println(dp[N][(int)Math.pow(2,N)-1]);
     }
 
@@ -42,7 +45,7 @@ class Main {
         for (int i = 1; i <= N; i++) {
             if (visited[i]) visitBit += (int) Math.pow(2, i - 1);
         }
-        if (dp[v][visitBit] == 0 || cost < dp[v][visitBit]) dp[v][visitBit] = cost;
+        dp[v][visitBit] = Math.min(dp[v][visitBit], cost);
         for (int i = 1; i <= N; i++) {
             if (graph[v][i] != 0 && !visited[i]) {
                 visited[i] = true;
