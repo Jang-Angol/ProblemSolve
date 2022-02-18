@@ -6,7 +6,8 @@ import java.util.*;
 class Main {
     static int[][] graph;
     static int[][] dp;
-    static boolean[] visited;
+    static int visitAll;
+    static int answer;
     static int N;
 
     public static void main(String[] args) throws IOException {
@@ -14,13 +15,14 @@ class Main {
         StringTokenizer st;
 
         N = Integer.parseInt(br.readLine());
+        answer = Integer.MAX_VALUE;
 
         graph = new int[N + 1][N + 1];
-        dp = new int[N + 1][(int) Math.pow(2, N)];
-        visited = new boolean[N + 1];
-        // int visitAll = (1<<N)-1; // pow보다 성능이 더 좋다
-        for (int i = 0; i <=N;i++){
-            Arrays.fill(dp[i],Integer.MAX_VALUE);
+        visitAll = (1 << N) - 1; // pow보다 성능이 더 좋다
+        dp = new int[N + 1][visitAll + 1];
+
+        for (int i = 0; i <= N; i++) {
+            Arrays.fill(dp[i], Integer.MAX_VALUE);
         }
 
         for (int i = 1; i <= N; i++) {
@@ -31,26 +33,27 @@ class Main {
         }
 
         dp[1][1] = 0;
-        visited[1] = true;
-        dfs(1,0);
+        dfs(1, 1);
 
-        for (int i = 1; i <= N; i++){
-            System.out.println(Arrays.toString(dp[i]));
-        }
-        System.out.println(dp[N][(int)Math.pow(2,N)-1]);
+        System.out.println(answer);
     }
 
-    static void dfs(int v, int cost) {
-        int visitBit = 0;
-        for (int i = 1; i <= N; i++) {
-            if (visited[i]) visitBit += (int) Math.pow(2, i - 1);
+    static void dfs(int v, int visitBit) {
+
+        if (visitBit == visitAll) {
+            if (graph[v][1] == 0) {
+                return; // v에서 원점으로 순회 불가능한 경우 제외
+            }
+            answer = Math.min(answer, dp[v][visitBit] + graph[v][1]);
         }
-        dp[v][visitBit] = Math.min(dp[v][visitBit], cost);
+
         for (int i = 1; i <= N; i++) {
-            if (graph[v][i] != 0 && !visited[i]) {
-                visited[i] = true;
-                dfs(i, cost + graph[v][i]);
-                visited[i] = false;
+            if ((visitBit & (1 << (i - 1))) == 0 && graph[v][i] != 0) {
+                int nextBit = visitBit | (1 << (i - 1));
+                if (dp[i][nextBit] > dp[v][visitBit] + graph[v][i]){
+                    dp[i][nextBit] = dp[v][visitBit] + graph[v][i];
+                    dfs(i,nextBit);
+                }
             }
         }
     }
