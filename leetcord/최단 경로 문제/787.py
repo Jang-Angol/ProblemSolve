@@ -4,7 +4,7 @@ import heapq
 from collections import defaultdict
 
 class Solution(object):
-    def findCheapestPrice(self, n, flights, src, dst, k):
+    def findCheapestPrice(self, n, flights, src, dst, K):
         """
         :type n: int
         :type flights: List[List[int]]
@@ -14,20 +14,22 @@ class Solution(object):
         :rtype: int
         """
         graph = defaultdict(list)
+        visited = [[0 for _ in range(n)] for __ in range(n)]
         
         for u,v,w in flights:
             graph[u].append((v,w))
         
-        pq = [(0,src,k)]
-        
+        pq = [(0,src,K)]
         while pq:
             price, node, k = heapq.heappop(pq)
             if node == dst:
                 return price
             if k >= 0:
                 for v, w in graph[node]:
-                    alt = price + w
-                    heapq.heappush(pq,(alt,v,k-1))
+                    if visited[node][v] > 5:
+                        continue
+                    visited[node][v] += 1
+                    heapq.heappush(pq,(price+w,v,k-1))            
         return -1
         
 n = 4
