@@ -11,3 +11,13 @@ class Solution(object):
         :type root: TreeNode
         :rtype: int
         """
+        answer = [0,0]
+        def dfs(d,depth,node):
+            if node == None:
+                answer[d] = max(answer[d],depth)
+                return
+            dfs(d,depth + 1, node.left)
+            dfs(d,depth + 1, node.right)
+        dfs(0,answer[0],root.left)
+        dfs(1,answer[1],root.right)
+        return sum(answer)
